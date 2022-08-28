@@ -1,31 +1,41 @@
 import { EVENTS_PROPERTIES, EventEmitter } from "./events.js";
 import { Events } from "./types.js";
 
-export function createStateObject<T extends Record<string, unknown>>(base: T): T & EventEmitter<Events> {
+export function createStateObject<T extends Record<string, unknown>>(
+    base: T
+): T & EventEmitter<Events> {
     const ee = new EventEmitter<Events>();
     const state = { ...base } as Record<string, unknown>;
     // Prepare base
     for (const key in state) {
         if (state.hasOwnProperty(key)) {
             if (EVENTS_PROPERTIES.indexOf(key) >= 0) {
-                throw new Error(`Failed configuring state: Property is reserved and cannot be used: ${key}`);
+                throw new Error(
+                    `Failed configuring state: Property is reserved and cannot be used: ${key}`
+                );
             }
         }
     }
     // Setup proxy
     const handler = {
-        defineProperty(target: T & EventEmitter<Events>, property: string, descriptor: PropertyDescriptor) {
+        defineProperty(
+            target: T & EventEmitter<Events>,
+            property: string,
+            descriptor: PropertyDescriptor
+        ) {
             return true;
         },
         getOwnPropertyDescriptor(target: T & EventEmitter<Events>, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
-                const descriptor = Reflect.getOwnPropertyDescriptor(ee, property) ||
-                    { value: handler.get(ee as T & EventEmitter<Events>, property) };
+                const descriptor = Reflect.getOwnPropertyDescriptor(ee, property) || {
+                    value: handler.get(ee as T & EventEmitter<Events>, property)
+                };
                 Object.defineProperty(ee, property, descriptor);
                 return descriptor;
             } else {
-                const descriptor = Reflect.getOwnPropertyDescriptor(state, property) ||
-                    { value: handler.get(state as T & EventEmitter<Events>, property) };
+                const descriptor = Reflect.getOwnPropertyDescriptor(state, property) || {
+                    value: handler.get(state as T & EventEmitter<Events>, property)
+                };
                 Object.defineProperty(state, property, descriptor);
                 return descriptor;
             }
@@ -56,7 +66,9 @@ export function createStateObject<T extends Record<string, unknown>>(base: T): T
         set(target: T & EventEmitter<Events>, property: string, value: any) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 if (["function"].indexOf(typeof ee[property]) >= 0) {
-                    throw new Error(`Failed updating state: Property is reserved and cannot be used: ${property}`);
+                    throw new Error(
+                        `Failed updating state: Property is reserved and cannot be used: ${property}`
+                    );
                 } else {
                     ee[property] = value;
                     return true;

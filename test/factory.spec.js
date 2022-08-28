@@ -2,23 +2,23 @@ import { expect } from "chai";
 import sinon from "sinon";
 import { createStateObject } from "../dist/factory.js";
 
-describe("factory", function() {
-    describe("createStateObject", function() {
-        it("creates an identical object", function() {
+describe("factory", function () {
+    describe("createStateObject", function () {
+        it("creates an identical object", function () {
             const state = createStateObject({ a: 1, b: 2 });
             expect(state).to.have.property("a", 1);
             expect(state).to.have.property("b", 2);
         });
 
-        it("provides a EventEmitter interface", function() {
+        it("provides a EventEmitter interface", function () {
             const state = createStateObject({ a: 1, b: 2 });
             expect(state.emit).to.be.a("function");
             expect(state.on).to.be.a("function");
             expect(state.off).to.be.a("function");
         });
 
-        describe("(state instance)", function() {
-            beforeEach(function() {
+        describe("(state instance)", function () {
+            beforeEach(function () {
                 this.state = createStateObject({
                     num: 123,
                     str: "hello",
@@ -27,7 +27,7 @@ describe("factory", function() {
                 });
             });
 
-            it("allows changing properties", function() {
+            it("allows changing properties", function () {
                 Object.assign(this.state, {
                     num: 456,
                     str: "bye",
@@ -42,7 +42,7 @@ describe("factory", function() {
                 });
             });
 
-            it("emits 'before' & 'update' events when changing values", function() {
+            it("emits 'before' & 'update' events when changing values", function () {
                 const beforeSpy = sinon.spy();
                 const afterSpy = sinon.spy();
                 this.state.on("before", beforeSpy);
