@@ -1,6 +1,8 @@
 # ObState
 > Generic object state management with events
 
+[![ulidx](https://img.shields.io/npm/v/obstate?color=blue&label=ulidx&logo=npm&style=flat-square)](https://www.npmjs.com/package/obstate) ![Tests](https://github.com/perry-mitchell/obstate/actions/workflows/test.yml/badge.svg)
+
 Simple state manager that uses objects to store and track state. Manage the object normally as it additionally provides events to listen to state changes.
 
 ObState uses `Proxy`s to handle state changes, and then emits events using a standard `EventEmitter` interface.
