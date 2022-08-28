@@ -5,18 +5,20 @@ import {
     ValidEventTypes
 } from "eventemitter3";
 
-// export const RESERVED_PROPERTIES: ReadonlyArray<string> = Object.freeze([
-//     "addListener",
-//     "emit",
-//     "eventNames",
-//     "listeners",
-//     "listenerCount",
-//     "off",
-//     "on",
-//     "once",
-//     "removeAllListeners",
-//     "removeListener"
-// ]);
+export const EVENTS_PROPERTIES: ReadonlyArray<string> = Object.freeze([
+    "_events",
+    "_eventsCount",
+    "addListener",
+    "emit",
+    "eventNames",
+    "listeners",
+    "listenerCount",
+    "off",
+    "on",
+    "once",
+    "removeAllListeners",
+    "removeListener"
+]);
 
 export class EventEmitter<T extends ValidEventTypes> extends EventEmitter3<T> {
     emit<E extends EventNames<T>>(eventName: E, ...args: Parameters<EventListener<T, E>>): boolean {
