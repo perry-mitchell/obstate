@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "module": "esnext",
+        "moduleResolution": "Node",
+        "target": "esnext",
+        "declaration": true,
+        "esModuleInterop": true,
+        "downlevelIteration": true,
+        "lib": [],
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+        "types": ["node"]
+    },
+    "include": [
+        "./source/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
