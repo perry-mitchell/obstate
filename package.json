@@ -1,6 +1,6 @@
 {
   "name": "obstate",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Generic object state management with events",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
