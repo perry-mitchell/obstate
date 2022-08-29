@@ -1,6 +1,24 @@
 import { EVENTS_PROPERTIES, EventEmitter } from "./events.js";
 import { Events } from "./types.js";
 
+/**
+ * Create a new state object (+ management interface)
+ * @param base The base record (object) to use for the state manager.
+ *  The type is used for downstream modifications to the state.
+ * @returns A managed state object with an event listener interface.
+ * @example
+ *  // Create a new object and modify it
+ *  const state = createStateObject({
+ *      count: 1,
+ *      ts: Date.now()
+ *  });
+ *  state.on("update", ({ property, newValue }) => {
+ *      console.log("Updated:", property, newValue);
+ *  });
+ *  state.count += 1;
+ *  // The above logs:
+ *  //  Updated: count 2
+ */
 export function createStateObject<T extends Record<string, unknown>>(
     base: T
 ): T & EventEmitter<Events> {
