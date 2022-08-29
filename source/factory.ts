@@ -41,7 +41,14 @@ export function createStateObject<T extends Record<string, unknown>>(
             }
         },
         deleteProperty(target: T & EventEmitter<Events>, property: string) {
-            throw new Error("Failed updating state: Cannot delete properties");
+            if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
+                delete ee[property];
+                return true;
+            } else if (property in state) {
+                delete state[property];
+                return true;
+            }
+            return false;
         },
         get(target: T & EventEmitter<Events>, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {

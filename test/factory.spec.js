@@ -17,6 +17,12 @@ describe("factory", function () {
             expect(state.off).to.be.a("function");
         });
 
+        it("throws when creating state with reserved properties", function () {
+            expect(() => {
+                createStateObject({ listeners: [] });
+            }).to.throw(/Failed configuring state/i);
+        });
+
         describe("(state instance)", function () {
             beforeEach(function () {
                 this.state = createStateObject({
@@ -61,6 +67,17 @@ describe("factory", function () {
                     newValue: 0
                 });
                 expect(beforeSpy.calledBefore(afterSpy)).to.be.true;
+            });
+
+            it("allows deleting properties", function () {
+                delete this.state.bool;
+                expect(this.state.bool).to.be.undefined;
+            });
+
+            it("throws when deleting unknown properties", function () {
+                expect(() => {
+                    delete this.state["unknown"];
+                }).to.throw(/deleteProperty.+falsish for property.+unknown/);
             });
         });
     });
