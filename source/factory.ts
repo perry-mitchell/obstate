@@ -4,6 +4,7 @@ import { Events } from "./types.js";
 export function createStateObject<T extends Record<string, unknown>>(
     base: T
 ): T & EventEmitter<Events> {
+    type StateTarget = T & EventEmitter<Events>;
     const ee = new EventEmitter<Events>();
     const state = { ...base } as Record<string, unknown>;
     // Prepare base
@@ -18,29 +19,25 @@ export function createStateObject<T extends Record<string, unknown>>(
     }
     // Setup proxy
     const handler = {
-        defineProperty(
-            target: T & EventEmitter<Events>,
-            property: string,
-            descriptor: PropertyDescriptor
-        ) {
+        defineProperty(target: StateTarget, property: string, descriptor: PropertyDescriptor) {
             return true;
         },
-        getOwnPropertyDescriptor(target: T & EventEmitter<Events>, property: string) {
+        getOwnPropertyDescriptor(target: StateTarget, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 const descriptor = Reflect.getOwnPropertyDescriptor(ee, property) || {
-                    value: handler.get(ee as T & EventEmitter<Events>, property)
+                    value: handler.get(ee as StateTarget, property)
                 };
                 Object.defineProperty(ee, property, descriptor);
                 return descriptor;
             } else {
                 const descriptor = Reflect.getOwnPropertyDescriptor(state, property) || {
-                    value: handler.get(state as T & EventEmitter<Events>, property)
+                    value: handler.get(state as StateTarget, property)
                 };
                 Object.defineProperty(state, property, descriptor);
                 return descriptor;
             }
         },
-        deleteProperty(target: T & EventEmitter<Events>, property: string) {
+        deleteProperty(target: StateTarget, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 delete ee[property];
                 return true;
@@ -50,19 +47,19 @@ export function createStateObject<T extends Record<string, unknown>>(
             }
             return false;
         },
-        get(target: T & EventEmitter<Events>, property: string) {
+        get(target: StateTarget, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 return ee[property];
             }
             return state[property];
         },
-        has(target: T & EventEmitter<Events>, property: string) {
+        has(target: StateTarget, property: string) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 return property in ee;
             }
             return property in state;
         },
-        ownKeys(target: T & EventEmitter<Events>) {
+        ownKeys(target: StateTarget) {
             return [
                 ...new Set([
                     ...Object.getOwnPropertySymbols(state),
@@ -70,7 +67,7 @@ export function createStateObject<T extends Record<string, unknown>>(
                 ])
             ];
         },
-        set(target: T & EventEmitter<Events>, property: string, value: any) {
+        set(target: StateTarget, property: string, value: any) {
             if (EVENTS_PROPERTIES.indexOf(property) >= 0) {
                 if (["function"].indexOf(typeof ee[property]) >= 0) {
                     throw new Error(
@@ -96,5 +93,5 @@ export function createStateObject<T extends Record<string, unknown>>(
             return true;
         }
     };
-    return new Proxy(ee as T & EventEmitter<Events>, handler);
+    return new Proxy(ee as StateTarget, handler);
 }
