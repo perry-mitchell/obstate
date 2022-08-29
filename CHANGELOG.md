@@ -1,5 +1,11 @@
 # ObState
 
+## v0.1.2
+_2022-08-29_
+
+ * **Bugfix**:
+   * Allow property deletion
+
 ## v0.1.1
 _2022-08-28_
 
