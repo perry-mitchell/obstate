@@ -19,12 +19,12 @@ import { Events } from "./types.js";
  *  // The above logs:
  *  //  Updated: count 2
  */
-export function createStateObject<T extends Record<string, unknown>>(
+export function createStateObject<T extends Record<string, any>>(
     base: T
 ): T & EventEmitter<Events> {
     type StateTarget = T & EventEmitter<Events>;
     const ee = new EventEmitter<Events>();
-    const state = { ...base } as Record<string, unknown>;
+    const state = { ...base } as Record<string, any>;
     // Prepare base
     for (const key in state) {
         if (state.hasOwnProperty(key)) {
