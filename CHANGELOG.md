@@ -1,5 +1,11 @@
 # ObState
 
+## v0.1.3
+_2022-10-11_
+
+ * **Bugfix**:
+   * Wrong base type for state
+
 ## v0.1.2
 _2022-08-29_
 
