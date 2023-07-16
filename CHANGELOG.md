@@ -1,5 +1,10 @@
 # ObState
 
+## v0.1.4
+_2023-07-16_
+
+ * Export path for react-native in `package.json`
+
 ## v0.1.3
 _2022-10-11_
 
